@@ -1,5 +1,5 @@
 # Busybuy App
-The Busybuy app provides users online shopping experience. Users can 
+The Busybuy app provides users online shopping experience.
 
 ## Tech Stack
 <div >
