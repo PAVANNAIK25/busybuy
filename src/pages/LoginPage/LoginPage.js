@@ -77,7 +77,9 @@ const LoginPage = () => {
           >
             <p style={{ fontWeight: "600", margin: 0 }}>Or SignUp instead</p>
           </NavLink>
+            <p style={{ fontWeight: "600", margin: 0 }}>or Use demo account <br/> username: demo@example.com <br/> password: Demo@123</p>
         </form>
+        
       </div>
     </>
   );

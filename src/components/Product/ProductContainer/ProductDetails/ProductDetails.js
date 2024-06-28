@@ -30,7 +30,6 @@ const ProductDetails = ({ title, price, productId, onCart, quantity }) => {
         user: user.uid,
         productId
       }
-      quantity += 1;
       dispatch(addToCartAsync(payload));
     } catch (err) {
       console.log(err);

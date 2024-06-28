@@ -12,7 +12,7 @@ const INITIAL_STATE = {
     error: null
 }
 
-export const addToCartAsync = createAsyncThunk('cart/addToCart', async (payload, { rejectWithValue, dispatch }) => {
+export const addToCartAsync = createAsyncThunk('cart/addToCart', async (payload, { rejectWithValue }) => {
     try {
         const { productId, user } = payload;
         //getting user cart info
@@ -33,14 +33,13 @@ export const addToCartAsync = createAsyncThunk('cart/addToCart', async (payload,
             return productId;
         }
         // creating new cart
-        if(data.myCart){
+        
+        const cart = data?.myCart || {}; // 
+        await setDoc(docRef, {
+            myCart: { ...cart, [productId]: 1 }
+        });
+        return toast.success("Product Added Successfully!");
 
-            const cart = data?.myCart || {}; // 
-            await setDoc(docRef, {
-                myCart: { ...cart, [productId]: 1 }
-            });
-            return toast.success("Product Added Successfully!");
-        }
     } catch (err) {
         return rejectWithValue(err.message);
     }
@@ -54,7 +53,7 @@ export const decreaseQuantityAsync = createAsyncThunk('cart/updateQuantity',
             //getting user cart info
             const { data, docRef } = await getUserCartProducts(user);
             //if user cart already exists
-            if (data && data.myCart[productId]) { 
+            if (data && data.myCart[productId]) {
                 const { myCart: cart } = data;
                 const currentProductCount = cart[productId];
                 let updatedCart;
@@ -93,7 +92,7 @@ export const getUserProductsAsync = createAsyncThunk('cart/getCartProducts',
         try {
             const { data } = await getUserCartProducts(payload);
             const productsData = await getProductsUsingProductIds(data.myCart);
-            return {myCart: data.myCart, productsData};
+            return { myCart: data.myCart, productsData };
         } catch (error) {
             rejectWithValue(error.message);
         }
@@ -134,7 +133,7 @@ export const purchaseFromCartAsync = createAsyncThunk('cart/purchase',
             const docRef = doc(db, "userOrders", user.uid);
             const docSnap = await getDoc(docRef);
             const data = docSnap.data();
-            
+
             //users orders exists
 
             if (data) {
@@ -146,7 +145,7 @@ export const purchaseFromCartAsync = createAsyncThunk('cart/purchase',
             }
             // first order of user
             await setDoc(docRef, {
-                orders: [{...cartMap, Date: Date.now()}],
+                orders: [{ ...cartMap, Date: Date.now() }],
             });
             clearCartAndRedirect(user);
             return;

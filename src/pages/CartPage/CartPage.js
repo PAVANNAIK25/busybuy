@@ -29,13 +29,12 @@ const CartPage = () => {
   }, [])
 
 
-  useEffect(()=>{
-    if(cartProducts.length > 0){
-      let updatedPrice = cartProducts?.reduce((acc, item) => {
-        return acc + item.price * item.quantity
-      }, 0);
-      setTotalPrice(updatedPrice);
-    }
+  useEffect(() => {
+    let updatedPrice = cartProducts?.reduce((acc, item) => {
+      return acc + item.price * item.quantity
+    }, 0);
+    setTotalPrice(updatedPrice);
+
   }, [cartProducts])
 
   useEffect(() => {
@@ -47,14 +46,14 @@ const CartPage = () => {
     try {
       // Write code to purchase the item present in the cart
       // Clear the item present in the cart after successful purchase
-      dispatch(purchaseFromCartAsync({user, cart, cartMap}));
+      dispatch(purchaseFromCartAsync({ user, cart, cartMap }));
       // Redirect the user to orders page after successful purchase
-      setTimeout(()=>{
+      setTimeout(() => {
         navigate("/myorders");
       }, 500);
     } catch (error) {
       console.log(error);
-    } finally{
+    } finally {
       setPurchasing(false);
     }
   };

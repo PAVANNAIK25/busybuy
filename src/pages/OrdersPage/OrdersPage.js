@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import Loader from "../../components/UI/Loader/Loader";
 import styles from "./OrdersPage.module.css";
 import OrderTable from "../../components/OrderTable/OrderTable";
-import { getAllOrders, getProductsUsingProductIds } from "../../utils/utils";
+import { getProductsUsingProductIds } from "../../utils/utils";
 import { useSelector } from "react-redux";
 import { authSelector } from "../../redux/reducers/authReducer";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../../config/firebase";
+import { useNavigate } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
 
 
@@ -15,7 +15,13 @@ const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user } = useSelector(authSelector);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(!user){
+      navigate("/signin");
+    }
+  }, [user])
 
   const  getData= async ()=> {
     setLoading(true);
@@ -42,7 +48,6 @@ const OrdersPage = () => {
       });
       const finalOrders = await Promise.all(promiseArray);
       setOrders(finalOrders);
-      
     } catch (error) {
         console.log(error);
     }finally{
@@ -56,14 +61,6 @@ const OrdersPage = () => {
     getData();
   }, []);
 
-
-
-  // if user is not logged in then redirect to sign in page
-  // useEffect(() => {
-  //   if (!user) {
-  //     return navigate("/signin");
-  //   }
-  // }, [user]);
  
   if (loading) {
     return <Loader />;
