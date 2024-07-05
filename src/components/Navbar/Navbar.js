@@ -27,7 +27,6 @@ const Navbar = () => {
     navigate("/signin");
   }
 
-
   return (
     <nav
       className="navbar"

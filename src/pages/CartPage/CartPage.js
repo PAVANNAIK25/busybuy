@@ -26,15 +26,22 @@ const CartPage = () => {
   // Fetch all cart products for the user
   useEffect(() => {
     dispatch(getUserProductsAsync(user?.uid));
+    if(!cart){
+      setCartProducts([]);
+    }else{
+      setCartProducts(cart);
+    }
   }, [])
 
 
   useEffect(() => {
-    let updatedPrice = cartProducts?.reduce((acc, item) => {
-      return acc + item.price * item.quantity
-    }, 0);
-    setTotalPrice(updatedPrice);
-
+    if(cartProducts.length){
+      let updatedPrice = cartProducts?.reduce((acc, item) => {
+        return acc + item.price * item.quantity
+      }, 0);
+      setTotalPrice(updatedPrice);
+    }
+      
   }, [cartProducts])
 
   useEffect(() => {
